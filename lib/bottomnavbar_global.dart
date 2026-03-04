@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/pages/home_page.dart';
+import 'package:nurulfalah_apps/pages/zakat_page.dart';
 
 class Bottomnavbar extends StatefulWidget {
   const Bottomnavbar({super.key});
@@ -17,6 +18,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     return Scaffold(
       body: _pages[_selectIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: _selectIndex,
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
@@ -27,7 +29,10 @@ class _BottomnavbarState extends State<Bottomnavbar> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Donasi'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism),
+            label: 'Donasi',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

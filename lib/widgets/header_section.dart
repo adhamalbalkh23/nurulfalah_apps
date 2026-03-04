@@ -26,7 +26,7 @@ class HeaderSection extends StatelessWidget {
 
           SafeArea(
             child: Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   SizedBox(height: 8),
@@ -56,13 +56,13 @@ class HeaderSection extends StatelessWidget {
                       SizedBox(width: 12),
                       Icon(
                         Icons.notification_add,
-                        color: Colors.black,
+                        color: Colors.white,
                         size: 28,
                       ),
                     ],
                   ),
 
-                  SizedBox(height: 134),
+                  SizedBox(height: 124),
 
                   Container(
                     width: double.infinity,
@@ -77,7 +77,7 @@ class HeaderSection extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.mosque),
+                        Icon(Icons.mosque, color: Colors.green),
                         SizedBox(width: 12),
                         Expanded(
                           child: Text(

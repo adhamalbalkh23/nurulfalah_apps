@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class SedekahsubuhPage extends StatefulWidget {
-  const SedekahsubuhPage({super.key});
+class infaqumum extends StatefulWidget {
+  infaqumum({super.key});
 
   @override
-  State<SedekahsubuhPage> createState() => _SedekahsubuhPageState();
+  State<infaqumum> createState() => _InfaqUmumState();
 }
 
-class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
+class _InfaqUmumState extends State<infaqumum> {
   final TextEditingController nominalController = TextEditingController();
 
   int selectedNominal = -1;
@@ -48,89 +48,13 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                 ],
               ),
 
-              SizedBox(height: 12),
+              SizedBox(height: 20),
 
               Text(
-                "Sedekah Subuh",
+                "Infaq",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
 
-              SizedBox(height: 10),
-
-              // Judul
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(text: "Awali pagimu dengan\n"),
-                    TextSpan(
-                      text: "kebaikan abadi.",
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 20),
-
-              // Box Hadits
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFE8F5E9), Color(0xFFD0F0D6)],
-                  ),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.volunteer_activism,
-                        color: Colors.green,
-                      ),
-                    ),
-
-                    SizedBox(width: 12),
-
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '"Tidak ada satu subuh pun yang dialami hamba-hamba Allah kecuali turun kepada mereka dua malaikat..."',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black87,
-                            ),
-                          ),
-
-                          SizedBox(height: 8),
-
-                          Text(
-                            "— HR. Bukhari & Muslim",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(height: 20),
 
               Container(
@@ -147,7 +71,7 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                         Icon(Icons.bolt, color: Colors.green),
                         SizedBox(width: 6),
                         Text(
-                          "Sedekah Subuh",
+                          "Infaq Cepat",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -220,7 +144,64 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                   ],
                 ),
               ),
+
+              SizedBox(height: 20),
+
+              Text(
+                "Pilih Jenis Infaq",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.favorite, color: Colors.blue),
+                          SizedBox(height: 8),
+                          Text(
+                            "Infaq Umum",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(width: 10),
+
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.mosque_rounded, color: Colors.green),
+                          SizedBox(height: 8),
+                          Text(
+                            "Infaq Jumat",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
               SizedBox(height: 30),
+
               SizedBox(
                 height: 55,
                 child: ElevatedButton(
@@ -232,7 +213,7 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                     ),
                   ),
                   child: Text(
-                    "Sedekah Sekarang",
+                    "Infaq Sekarang",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

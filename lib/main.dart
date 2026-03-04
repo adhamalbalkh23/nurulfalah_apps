@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nurulfalah_apps/bottomnavbar.dart';
-import 'package:nurulfalah_apps/pages/home_page.dart';
+import 'package:nurulfalah_apps/bottomnavbar_global.dart';
+import 'package:nurulfalah_apps/pages/landing_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Bottomnavbar(),
+      home: Landingpage(),
     );
   }
 }

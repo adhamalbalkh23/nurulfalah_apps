@@ -9,17 +9,17 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HeaderSection(),
-            SizedBox(height: 58),
-            MenuSection(),
-            SizedBox(height: 24),
-            LaporanSection(),
-          ],
-        ),
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          HeaderSection(),
+
+          Expanded(
+            child: ListView(
+              children: [MenuSection(), SizedBox(height: 24), LaporanSection()],
+            ),
+          ),
+        ],
       ),
     );
   }
