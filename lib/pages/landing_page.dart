@@ -21,7 +21,7 @@ class Landingpage extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 60),
+            padding: EdgeInsets.symmetric(horizontal: 34, vertical: 60),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,9 +36,9 @@ class Landingpage extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
-                  const Text(
+                  Text(
                     "Salurkan zakat, infak, dan sedekah langsung \ndari ponsel anda.",
                     style: TextStyle(
                       fontSize: 15,
@@ -60,7 +60,7 @@ class Landingpage extends StatelessWidget {
                   SizedBox(height: 34),
 
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(12),

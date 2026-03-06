@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
+import 'package:nurulfalah_apps/models/user_model.dart';
 import 'package:nurulfalah_apps/pages/login_page.dart';
 
-class Registerpage extends StatelessWidget {
+class Registerpage extends StatefulWidget {
   const Registerpage({super.key});
+
+  @override
+  State<Registerpage> createState() => _RegisterpageState();
+}
+
+class _RegisterpageState extends State<Registerpage> {
+  final TextEditingController emailContoler = TextEditingController();
+  final TextEditingController passwordControler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,8 @@ class Registerpage extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                TextField(
+                TextFormField(
+                  controller: emailContoler,
                   decoration: InputDecoration(
                     hintText: "Masukkan emailmu disini",
                     border: OutlineInputBorder(),
@@ -81,7 +92,8 @@ class Registerpage extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                TextField(
+                TextFormField(
+                  controller: passwordControler,
                   decoration: InputDecoration(
                     hintText: "Masukkan passwordmu disini",
                     border: OutlineInputBorder(),
@@ -96,7 +108,8 @@ class Registerpage extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                TextField(
+                TextFormField(
+                  controller: passwordControler,
                   decoration: InputDecoration(
                     hintText: "Konfirmasi passwordmu disini",
                     border: OutlineInputBorder(),
@@ -109,37 +122,19 @@ class Registerpage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            title: Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                              size: 50,
-                            ),
-                            content: Text(
-                              "Pendaftaran berhasil!",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Tutup popup
-                                  context.pushReplacement(Loginpage());
-                                },
-                                child: Text("OK"),
-                              ),
-                            ],
-                          );
-                        },
+                    onPressed: () async {
+                      await DbHelper.registerUser(
+                        emailContoler.text.trim(),
+                        passwordControler.text.trim(),
                       );
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Pendaftaran Berhasil")),
+                        );
+
+                        context.pushReplacement(Loginpage());
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,

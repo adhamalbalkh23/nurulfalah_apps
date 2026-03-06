@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/bottomnavbar_global.dart';
+import 'package:nurulfalah_apps/database/prefernce.dart';
+import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
+import 'package:nurulfalah_apps/models/user_model.dart';
 
-class Loginpage extends StatelessWidget {
+class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
+
+  @override
+  State<Loginpage> createState() => _LoginpageState();
+}
+
+class _LoginpageState extends State<Loginpage> {
+  final TextEditingController emailContoler = TextEditingController();
+  final TextEditingController passwordControler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +51,8 @@ class Loginpage extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                TextField(
+                TextFormField(
+                  controller: emailContoler,
                   decoration: InputDecoration(
                     hintText: "Masukan emailmu disini",
                     border: OutlineInputBorder(),
@@ -55,7 +67,8 @@ class Loginpage extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                TextField(
+                TextFormField(
+                  controller: passwordControler,
                   decoration: InputDecoration(
                     hintText: "Masukan passwordmu disini",
                     border: OutlineInputBorder(),
@@ -69,8 +82,40 @@ class Loginpage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      context.pushAndRemoveAll(Bottomnavbar());
+                    onPressed: () async {
+                      final user = await DbHelper.loginUser(
+                        emailContoler.text.trim(),
+                        passwordControler.text.trim(),
+                      );
+                      print(user);
+                      if (user != null) {
+                        // SIMPAN STATUS LOGIN
+                        await PreferenceHandler().storingIsLogin(true);
+
+                        // SIMPAN ROLE
+                        await PreferenceHandler().storingRole(user["role"]);
+
+                        String role = user["role"];
+                        if (user["role"] == "admin") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Login sebagai Pengurus Masjid"),
+                            ),
+                          );
+
+                          context.pushAndRemoveAll(Bottomnavbar(role: role));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login sebagai User")),
+                          );
+
+                          context.pushAndRemoveAll(Bottomnavbar(role: role));
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Email atau password salah")),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,

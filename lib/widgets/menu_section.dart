@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
 import 'package:nurulfalah_apps/pages/infaq_page.dart';
 import 'package:nurulfalah_apps/pages/laporankegiatan_page.dart';
 import 'package:nurulfalah_apps/pages/sedekahsubuh_page.dart';
 import 'package:nurulfalah_apps/pages/zakat_page.dart';
+import 'package:nurulfalah_apps/pages_laporan%20CRUD/laporanadmin.dart';
 
 class MenuSection extends StatelessWidget {
   @override
@@ -125,7 +127,15 @@ class MenuSection extends StatelessWidget {
 
           // Laporan
           InkWell(
-            onTap: () => context.push(LaporankegiatanPage()),
+            onTap: () async {
+              String? role = await PreferenceHandler.getRole();
+              if (!context.mounted) return;
+              if (role == "admin") {
+                context.push(Laporanadmin());
+              } else {
+                context.push(Laporanadmin());
+              }
+            },
             child: Column(
               children: [
                 CircleAvatar(

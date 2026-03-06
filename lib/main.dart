@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/bottomnavbar_global.dart';
+import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/pages/landing_page.dart';
+import 'package:nurulfalah_apps/pages/splash_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  PreferenceHandler().init();
   runApp(const MyApp());
 }
 
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Landingpage(),
+      home: SplashPage(),
     );
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/pages/home_page.dart';
+import 'package:nurulfalah_apps/pages/profil_page.dart';
+import 'package:nurulfalah_apps/pages/riwayatdonasi_page.dart';
 import 'package:nurulfalah_apps/pages/zakat_page.dart';
+import 'package:nurulfalah_apps/pages_laporan%20CRUD/laporanadmin.dart';
 
 class Bottomnavbar extends StatefulWidget {
-  const Bottomnavbar({super.key});
+  final String role;
+  const Bottomnavbar({super.key, required this.role});
 
   @override
   State<Bottomnavbar> createState() => _BottomnavbarState();
@@ -12,11 +16,11 @@ class Bottomnavbar extends StatefulWidget {
 class _BottomnavbarState extends State<Bottomnavbar> {
   int _selectIndex = 0;
 
-  final List<Widget> _pages = [HomePage()];
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [HomePage(), RiwayatdonasiPage(), ProfilPage()];
     return Scaffold(
-      body: _pages[_selectIndex],
+      body: pages[_selectIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         currentIndex: _selectIndex,

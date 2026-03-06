@@ -81,7 +81,7 @@ class HeaderSection extends StatelessWidget {
                         SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            "Assalamualaikum Adham",
+                            "Masjid Nuruul Falaah",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

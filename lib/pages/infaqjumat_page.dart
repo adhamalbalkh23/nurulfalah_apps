@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nurulfalah_apps/extension/navigator.dart';
+import 'package:nurulfalah_apps/pages_pembayaran/payment_page.dart';
 
 class InfaqjumatPage extends StatefulWidget {
-  InfaqjumatPage({super.key});
+  const InfaqjumatPage({super.key});
 
   @override
   State<InfaqjumatPage> createState() => _InfaqjumatPageState();
 }
 
 class _InfaqjumatPageState extends State<InfaqjumatPage> {
+  int selectedNominal = 0;
   int selectedIndex = 0;
 
   final List<int> nominal = [10000, 50000, 100000];
@@ -199,6 +202,7 @@ class _InfaqjumatPageState extends State<InfaqjumatPage> {
                     onTap: () {
                       setState(() {
                         selectedIndex = index;
+                        selectedNominal = nominal[index];
                       });
                     },
                     child: Container(
@@ -286,14 +290,25 @@ class _InfaqjumatPageState extends State<InfaqjumatPage> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        // selectedNominal = 20000;
+                      });
+                      print(selectedNominal);
+                      context.push(
+                        PaymentPage(
+                          jenis: "Infaq Jum'at",
+                          nominal: selectedNominal,
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Infaq Sekarang ",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

@@ -200,10 +200,10 @@ class _InfaqUmumState extends State<infaqumum> {
                 ],
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 24),
 
               SizedBox(
-                height: 55,
+                height: 54,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
