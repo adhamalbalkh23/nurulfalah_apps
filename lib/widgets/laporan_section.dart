@@ -29,7 +29,7 @@ class LaporanSection extends StatelessWidget {
                 width: 260,
                 margin: EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xfff90C67C),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
                 ),
@@ -59,7 +59,7 @@ class LaporanSection extends StatelessWidget {
                           SizedBox(height: 6),
                           Text(
                             "Penyaluran 50 Paket Sembako.",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
                         ],
                       ),
@@ -73,7 +73,7 @@ class LaporanSection extends StatelessWidget {
                 width: 260,
                 margin: EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xfff90C67C),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
                 ),
@@ -103,7 +103,7 @@ class LaporanSection extends StatelessWidget {
                           SizedBox(height: 6),
                           Text(
                             "Bantuan sembako untuk warga sekitar.",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
                         ],
                       ),
@@ -116,7 +116,7 @@ class LaporanSection extends StatelessWidget {
               Container(
                 width: 260,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xfff90C67C),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
                 ),
@@ -146,7 +146,7 @@ class LaporanSection extends StatelessWidget {
                           SizedBox(height: 6),
                           Text(
                             "Penyaluran nasi untuk jamaah sholat Jum'at .",
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
                         ],
                       ),

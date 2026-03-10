@@ -11,7 +11,10 @@ class _ZakatPageState extends State<ZakatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Pilih Jenis Zakat")),
+      appBar: AppBar(
+        title: Text("Pilih Jenis Zakat"),
+        backgroundColor: Color(0xfff90C67C),
+      ),
 
       body: ListView(
         padding: EdgeInsets.all(16),

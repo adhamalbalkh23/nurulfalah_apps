@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nurulfalah_apps/database/prefernce.dart';
+import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
 import 'package:nurulfalah_apps/bottomnavbar_global.dart';
 import 'package:nurulfalah_apps/pages/home_page.dart';
 import 'package:nurulfalah_apps/pages/riwayatdonasi_page.dart';
+import 'package:nurulfalah_apps/pages_pembayaran/riwayatcrud.dart';
+import 'package:lottie/lottie.dart';
 
 class Paymentsukses extends StatelessWidget {
   final String jenis;
@@ -37,19 +41,19 @@ class Paymentsukses extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: Icon(Icons.close),
-                  onPressed: () => context.pushAndRemoveAll(HomePage()),
+                  onPressed: () =>
+                      context.pushAndRemoveAll(Bottomnavbar(role: "user")),
                 ),
               ),
 
-              SizedBox(height: 20),
+              SizedBox(height: 8),
 
-              CircleAvatar(
-                radius: 45,
-                backgroundColor: Colors.green.withOpacity(0.1),
-                child: Icon(Icons.check, color: Colors.green, size: 40),
+              /// ANIMASI SUCCESS
+              Lottie.asset(
+                "assets/animations/gopay_succesfull_payment.json",
+                width: 185,
+                repeat: true,
               ),
-
-              SizedBox(height: 20),
 
               Text(
                 "Alhamdulillah, Donasi Berhasil!",
@@ -64,12 +68,13 @@ class Paymentsukses extends StatelessWidget {
                 style: TextStyle(color: Colors.grey),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 18),
 
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.grey[100],
+                  boxShadow: [BoxShadow(color: Colors.black12)],
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -133,9 +138,7 @@ class Paymentsukses extends StatelessWidget {
                   ],
                 ),
               ),
-
-              Spacer(),
-
+              SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -147,9 +150,12 @@ class Paymentsukses extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    context.pushAndRemoveAll(HomePage());
+                    context.pushAndRemoveAll(Bottomnavbar(role: "user"));
                   },
-                  child: Text("Kembali ke Beranda"),
+                  child: Text(
+                    "Kembali ke Beranda",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
 
@@ -160,7 +166,7 @@ class Paymentsukses extends StatelessWidget {
                 height: 55,
                 child: OutlinedButton(
                   onPressed: () {
-                    context.push(RiwayatdonasiPage());
+                    context.push(Riwayatcrud());
                   },
                   child: Text("Lihat Riwayat"),
                 ),

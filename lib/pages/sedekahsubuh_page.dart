@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:nurulfalah_apps/extension/navigator.dart';
+import 'package:nurulfalah_apps/pages_pembayaran/payment_page.dart';
 
 class SedekahsubuhPage extends StatefulWidget {
   const SedekahsubuhPage({super.key});
@@ -235,6 +237,13 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                       height: 54,
                       child: ElevatedButton(
                         onPressed: () {
+                          setState(() {});
+                          context.push(
+                            PaymentPage(
+                              jenis: "Sedekah Subuh",
+                              nominal: selectedNominal,
+                            ),
+                          );
                           if (nominalController.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -244,7 +253,9 @@ class _SedekahsubuhPageState extends State<SedekahsubuhPage> {
                           } else {
                             // Implement donation logic
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Donasi berhasil')),
+                              SnackBar(
+                                content: Text('Nominal berhasil di input'),
+                              ),
                             );
                           }
                         },

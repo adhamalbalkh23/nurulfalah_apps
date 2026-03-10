@@ -1,38 +1,37 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceHandler {
-  //Inisialisasi Shared Preference
   static final PreferenceHandler _instance = PreferenceHandler._internal();
   late SharedPreferences _preferences;
+
   factory PreferenceHandler() => _instance;
+
   PreferenceHandler._internal();
+
   Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  //Key user
+  // KEY
   static const String _isLogin = 'isLogin';
   static const String _role = 'role';
+  static const String _nama = 'nama';
+  static const String _userId = "userId";
 
-  //CREATE
+  // SIMPAN LOGIN
   Future<void> storingIsLogin(bool isLogin) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(_isLogin, isLogin);
+    _preferences.setBool(_isLogin, isLogin);
   }
 
-  //GET
+  // AMBIL LOGIN
   static Future<bool?> getIsLogin() async {
     final prefs = await SharedPreferences.getInstance();
-
-    var data = prefs.getBool(_isLogin);
-    return data;
+    return prefs.getBool(_isLogin);
   }
 
   // SIMPAN ROLE
   Future<void> storingRole(String role) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setString(_role, role);
+    _preferences.setString(_role, role);
   }
 
   // AMBIL ROLE
@@ -41,10 +40,29 @@ class PreferenceHandler {
     return prefs.getString(_role);
   }
 
-  //DELETE
-  Future<void> deleteIsLogin() async {
-    final prefs = await SharedPreferences.getInstance();
+  // SIMPAN NAMA
+  Future<void> storingNama(String nama) async {
+    _preferences.setString(_nama, nama);
+  }
 
-    await prefs.remove(_isLogin);
+  // AMBIL NAMA
+  static Future<String?> getNama() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_nama);
+  }
+
+  // LOGOUT
+  Future<void> deleteIsLogin() async {
+    await _preferences.remove(_isLogin);
+  }
+
+  // UserId
+  Future<void> storingUserId(int id) async {
+    _preferences.setInt(_userId, id);
+  }
+
+  static Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_userId);
   }
 }

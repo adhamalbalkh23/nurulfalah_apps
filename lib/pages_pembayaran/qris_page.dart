@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nurulfalah_apps/database/prefernce.dart';
+import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/pages_pembayaran/paymentsukses.dart';
 
 class QrisPage extends StatelessWidget {
@@ -72,14 +74,19 @@ class QrisPage extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  int? userId = await PreferenceHandler.getUserId();
+
+                  if (userId != null) {
+                    await DbHelper.insertDonasi(userId, jenis, nominal);
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => Paymentsukses(
                         jenis: jenis,
                         nominal: nominal,
-                        metode: "qris",
+                        metode: "Qris",
                       ),
                     ),
                   );

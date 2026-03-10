@@ -14,7 +14,8 @@ class Registerpage extends StatefulWidget {
 class _RegisterpageState extends State<Registerpage> {
   final TextEditingController emailContoler = TextEditingController();
   final TextEditingController passwordControler = TextEditingController();
-
+  final TextEditingController namaControler = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,129 +31,154 @@ class _RegisterpageState extends State<Registerpage> {
           ),
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 22, vertical: 62),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        "assets/images/logo app.png",
-                        height: 316,
-                        width: 316,
-                      ),
-
-                      Text(
-                        "Pendaftaran Akun",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/logo app.png",
+                          height: 316,
+                          width: 316,
                         ),
-                      ),
-                    ],
+
+                        Text(
+                          "Pendaftaran Akun",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 2),
+                  SizedBox(height: 2),
 
-                Text(
-                  "Nama",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: "Masukkan namamu disini",
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  Text(
+                    "Nama",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                ),
-
-                SizedBox(height: 4),
-
-                Text(
-                  "Email",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: emailContoler,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan emailmu disini",
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: namaControler,
+                    decoration: InputDecoration(
+                      hintText: "Masukkan namamu disini",
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
                   ),
-                ),
-                SizedBox(height: 4),
 
-                Text(
-                  "Password",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: passwordControler,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan passwordmu disini",
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  SizedBox(height: 4),
+
+                  Text(
+                    "Email",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(height: 4),
-
-                Text(
-                  "Konfirmasi Password",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                TextFormField(
-                  controller: passwordControler,
-                  decoration: InputDecoration(
-                    hintText: "Konfirmasi passwordmu disini",
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: emailContoler,
+                    decoration: InputDecoration(
+                      hintText: "Masukkan emailmu disini",
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Email wajib diisi";
+                      }
+                      if (!value.contains("@")) {
+                        return "Email harus mengandung @";
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 12),
+                  SizedBox(height: 4),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await DbHelper.registerUser(
-                        emailContoler.text.trim(),
-                        passwordControler.text.trim(),
-                      );
+                  Text(
+                    "Password",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: passwordControler,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Masukkan passwordmu disini",
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Password wajib diisi";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 4),
 
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Pendaftaran Berhasil")),
+                  Text(
+                    "Konfirmasi Password",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4),
+                  TextFormField(
+                    controller: passwordControler,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Konfirmasi passwordmu disini",
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 12),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        await DbHelper.registerUser(
+                          namaControler.text.trim(),
+                          emailContoler.text.trim(),
+                          passwordControler.text.trim(),
                         );
 
-                        context.pushReplacement(Loginpage());
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightGreen,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Pendaftaran Berhasil")),
+                          );
+
+                          context.pushReplacement(Loginpage());
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightGreen,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      "Daftar",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                      child: Text(
+                        "Daftar",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

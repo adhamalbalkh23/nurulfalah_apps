@@ -31,7 +31,7 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Laporan Kegiatan"),
-        backgroundColor: Colors.green[50],
+        backgroundColor: Color(0xfff90C67C),
         foregroundColor: Colors.black,
         elevation: 0,
       ),
@@ -68,7 +68,7 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
               return Container(
                 margin: EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.green[50],
+                  color: Color(0xfff90C67C),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
@@ -102,7 +102,7 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
                         children: [
                           Text(
                             item["tanggal"],
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
 
                           SizedBox(height: 6),
@@ -119,7 +119,7 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
 
                           Text(
                             item["deskripsi"],
-                            style: TextStyle(color: Colors.grey, fontSize: 13),
+                            style: TextStyle(color: Colors.white, fontSize: 13),
                           ),
 
                           SizedBox(height: 10),

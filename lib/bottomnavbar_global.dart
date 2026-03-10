@@ -4,6 +4,7 @@ import 'package:nurulfalah_apps/pages/profil_page.dart';
 import 'package:nurulfalah_apps/pages/riwayatdonasi_page.dart';
 import 'package:nurulfalah_apps/pages/zakat_page.dart';
 import 'package:nurulfalah_apps/pages_laporan%20CRUD/laporanadmin.dart';
+import 'package:nurulfalah_apps/pages_pembayaran/riwayatcrud.dart';
 
 class Bottomnavbar extends StatefulWidget {
   final String role;
@@ -18,7 +19,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomePage(), RiwayatdonasiPage(), ProfilPage()];
+    final List<Widget> pages = [HomePage(), Riwayatcrud(), ProfilPage()];
     return Scaffold(
       body: pages[_selectIndex],
       bottomNavigationBar: BottomNavigationBar(

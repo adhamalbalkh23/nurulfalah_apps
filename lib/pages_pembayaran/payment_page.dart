@@ -16,6 +16,8 @@ class _PaymentPageState extends State<PaymentPage> {
     return "Rp ${number.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.')}";
   }
 
+  bool sembunyikanNama = false;
+  bool metodeQris = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,24 +88,23 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                   SizedBox(height: 24),
                   Container(
-                    padding: EdgeInsets.all(14),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 12),
-
-                        Expanded(
-                          child: Text(
-                            "Sembunyikan nama anda?",
-                            style: TextStyle(fontWeight: FontWeight.w400),
-                          ),
-                        ),
-
-                        Icon(Icons.circle_outlined),
-                      ],
+                    child: CheckboxListTile(
+                      contentPadding:
+                          EdgeInsets.zero, // penting supaya pas di container
+                      value: sembunyikanNama,
+                      onChanged: (value) {
+                        setState(() {
+                          sembunyikanNama = value!;
+                        });
+                      },
+                      title: Text("Sembunyikan nama anda?"),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      activeColor: Colors.green,
                     ),
                   ),
 
@@ -117,26 +118,25 @@ class _PaymentPageState extends State<PaymentPage> {
                   SizedBox(height: 12),
 
                   Container(
-                    padding: EdgeInsets.all(14),
+                    padding: EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.qr_code),
+                    child: CheckboxListTile(
+                      contentPadding:
+                          EdgeInsets.zero, // penting supaya pas di container
+                      value: metodeQris,
+                      onChanged: (value) {
+                        setState(() {
+                          metodeQris = value!;
+                        });
+                      },
+                      secondary: Icon(Icons.qr_code),
 
-                        SizedBox(width: 12),
-
-                        Expanded(
-                          child: Text(
-                            "Qris",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-
-                        Icon(Icons.circle_outlined),
-                      ],
+                      title: Text("Qris"),
+                      controlAffinity: ListTileControlAffinity.trailing,
+                      activeColor: Colors.green,
                     ),
                   ),
 
@@ -159,6 +159,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green),
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(14),
                     ),

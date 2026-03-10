@@ -241,11 +241,11 @@ class _InfaqjumatPageState extends State<InfaqjumatPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Nominal Lain",
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       TextField(
                         controller: nominalController,
                         keyboardType: TextInputType.number,

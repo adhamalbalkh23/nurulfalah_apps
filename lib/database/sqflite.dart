@@ -9,13 +9,14 @@ class DbHelper {
     return openDatabase(
       join(dbPath, 'nurulfalah.db'),
 
-      version: 3,
+      version: 8,
 
       onCreate: (db, version) async {
         /// TABEL USER
         await db.execute('''
         CREATE TABLE user(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama TEXT,
         email TEXT,
         password TEXT,
         role TEXT
@@ -33,6 +34,7 @@ class DbHelper {
         await db.execute('''
         CREATE TABLE donasi(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
         jenis TEXT,
         nominal INTEGER,
         tanggal TEXT
@@ -62,10 +64,15 @@ class DbHelper {
 
   // REGISTER USER
 
-  static Future<void> registerUser(String email, String password) async {
+  static Future<void> registerUser(
+    String nama,
+    String email,
+    String password,
+  ) async {
     final dbs = await db();
 
     await dbs.insert("user", {
+      "nama": nama.trim(),
       "email": email.trim(),
       "password": password.trim(),
       "role": "user",
@@ -95,10 +102,15 @@ class DbHelper {
 
   // SIMPAN DONASI
 
-  static Future<void> insertDonasi(String jenis, int nominal) async {
+  static Future<void> insertDonasi(
+    int userId,
+    String jenis,
+    int nominal,
+  ) async {
     final dbs = await db();
 
     await dbs.insert("donasi", {
+      "user_id": userId,
       "jenis": jenis,
       "nominal": nominal,
       "tanggal": DateTime.now().toString(),
@@ -107,10 +119,15 @@ class DbHelper {
 
   // AMBIL RIWAYAT DONASI
 
-  static Future<List<Map<String, dynamic>>> getDonasi() async {
+  static Future<List<Map<String, dynamic>>> getDonasiUser(int userId) async {
     final dbs = await db();
 
-    return dbs.query("donasi", orderBy: "id DESC");
+    return dbs.query(
+      "donasi",
+      where: "user_id=?",
+      whereArgs: [userId],
+      orderBy: "id DESC",
+    );
   }
 
   // TAMBAH LAPORAN KEGIATAN

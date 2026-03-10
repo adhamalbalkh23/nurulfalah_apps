@@ -3,8 +3,27 @@ import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
 import 'package:nurulfalah_apps/pages/login_page.dart';
 
-class ProfilPage extends StatelessWidget {
+class ProfilPage extends StatefulWidget {
   const ProfilPage({super.key});
+
+  @override
+  State<ProfilPage> createState() => _ProfilPageState();
+}
+
+class _ProfilPageState extends State<ProfilPage> {
+  String nama = "";
+  void loadUser() async {
+    String? data = await PreferenceHandler.getNama();
+    setState(() {
+      nama = data ?? "user";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +32,7 @@ class ProfilPage extends StatelessWidget {
 
       appBar: AppBar(
         title: Text("Profil Saya"),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xfff90C67C),
         foregroundColor: Colors.black,
         elevation: 0,
       ),
@@ -49,7 +68,7 @@ class ProfilPage extends StatelessWidget {
             SizedBox(height: 12),
 
             Text(
-              "Adham",
+              nama,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 

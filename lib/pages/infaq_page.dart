@@ -11,7 +11,7 @@ class InfaqPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF2F3F5),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xfff90C67C),
         elevation: 0,
 
         title: Text(

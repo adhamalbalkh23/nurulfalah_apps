@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:nurulfalah_apps/extension/navigator.dart';
+import 'package:nurulfalah_apps/pages_pembayaran/payment_page.dart';
 
 class infaqumum extends StatefulWidget {
   infaqumum({super.key});
@@ -205,7 +207,15 @@ class _InfaqUmumState extends State<infaqumum> {
               SizedBox(
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {});
+                    context.push(
+                      PaymentPage(
+                        jenis: "Infaq Umum",
+                        nominal: selectedNominal,
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
