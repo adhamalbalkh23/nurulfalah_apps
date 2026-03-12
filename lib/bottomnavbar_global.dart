@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nurulfalah_apps/pages/dashboard_admin.dart';
 import 'package:nurulfalah_apps/pages/home_page.dart';
 import 'package:nurulfalah_apps/pages/profil_page.dart';
-import 'package:nurulfalah_apps/pages/riwayatdonasi_page.dart';
-import 'package:nurulfalah_apps/pages/zakat_page.dart';
-import 'package:nurulfalah_apps/pages_laporan%20CRUD/laporanadmin.dart';
 import 'package:nurulfalah_apps/pages_pembayaran/riwayatcrud.dart';
 
 class Bottomnavbar extends StatefulWidget {
@@ -19,27 +17,62 @@ class _BottomnavbarState extends State<Bottomnavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [HomePage(), Riwayatcrud(), ProfilPage()];
+    /// HALAMAN UNTUK USER
+    List<Widget> pagesUser = [HomePage(), Riwayatcrud(), ProfilPage()];
+
+    /// HALAMAN UNTUK ADMIN
+    List<Widget> pagesAdmin = [
+      HomePage(),
+      AdminDashboardPage(),
+      Riwayatcrud(),
+      ProfilPage(),
+    ];
+
+    /// PILIH PAGE BERDASARKAN ROLE
+    final pages = widget.role == "admin" ? pagesAdmin : pagesUser;
+
     return Scaffold(
       body: pages[_selectIndex],
+
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         currentIndex: _selectIndex,
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
+
         onTap: (index) {
           setState(() {
             _selectIndex = index;
           });
         },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.volunteer_activism),
-            label: 'Donasi',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+
+        items: widget.role == "admin"
+            ? const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard),
+                  label: 'Dashboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.volunteer_activism),
+                  label: 'Donasi',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ]
+            : const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.volunteer_activism),
+                  label: 'Donasi',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
       ),
     );
   }
