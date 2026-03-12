@@ -46,7 +46,8 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
                   MaterialPageRoute(builder: (context) => TambahLaporanPage()),
                 ).then((_) => setState(() {}));
               },
-              child: Icon(Icons.add),
+              backgroundColor: Colors.green,
+              child: Icon(Icons.add, color: Colors.white),
             )
           : null,
 
@@ -72,9 +73,10 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
+                      color: Colors.black45,
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                      offset: Offset(0, 8),
                     ),
                   ],
                 ),

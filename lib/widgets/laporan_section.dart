@@ -21,7 +21,7 @@ class LaporanSection extends StatelessWidget {
         SizedBox(
           height: 230,
           child: ListView(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.horizontal, // Biar bisa di scroll ke samping
             padding: EdgeInsets.only(left: 16),
             children: [
               // Laporan 1
