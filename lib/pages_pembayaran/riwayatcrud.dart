@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/database/sqflite.dart';
 
@@ -15,11 +16,12 @@ class _RiwayatdonasiPageState extends State<Riwayatcrud> {
 
   void loadDonasi() async {
     int? userId = await PreferenceHandler.getUserId();
-    print("UserID: $userId"); // DEBUG
+    print("UserID: $userId");
 
     if (userId != null) {
       final data = await DbHelper.getDonasiUser(userId);
-      print("Data Donasi: $data"); // DEBUG
+      print("Data Donasi: $data");
+
       setState(() {
         dataDonasi = data;
       });
@@ -33,6 +35,7 @@ class _RiwayatdonasiPageState extends State<Riwayatcrud> {
   }
 
   final formatRupiah = NumberFormat("#,###", "id_ID");
+
   IconData getIcon(String jenis) {
     if (jenis.contains("Zakat")) {
       return Icons.account_balance;
@@ -64,73 +67,99 @@ class _RiwayatdonasiPageState extends State<Riwayatcrud> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Riwayat Donasi"),
-        backgroundColor: Color(0xfff90C67C),
+        backgroundColor: Color(0xff90C67C),
         foregroundColor: Colors.black,
         elevation: 0,
       ),
 
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.white,
 
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: dataDonasi.length,
-        itemBuilder: (context, index) {
-          final item = dataDonasi[index];
+      /// JIKA BELUM ADA RIWAYAT DONASI
+      body: dataDonasi.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  /// LOTTIE ANIMATION
+                  Lottie.asset("assets/animations/empty.json", height: 200),
 
-          return Container(
-            margin: EdgeInsets.only(bottom: 16),
+                  SizedBox(height: 20),
 
-            padding: EdgeInsets.all(16),
-
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: getColor(item["jenis"]).withOpacity(0.1),
-                  child: Icon(
-                    getIcon(item["jenis"]),
-                    color: getColor(item["jenis"]),
+                  Text(
+                    "Belum ada riwayat donasi",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
                   ),
-                ),
+                ],
+              ),
+            )
+          /// JIKA ADA DATA DONASI
+          : ListView.builder(
+              padding: EdgeInsets.all(16),
+              itemCount: dataDonasi.length,
+              itemBuilder: (context, index) {
+                final item = dataDonasi[index];
 
-                SizedBox(width: 12),
+                return Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.all(16),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+
+                  child: Row(
                     children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: getColor(
+                          item["jenis"],
+                        ).withOpacity(0.1),
+                        child: Icon(
+                          getIcon(item["jenis"]),
+                          color: getColor(item["jenis"]),
+                        ),
+                      ),
+
+                      SizedBox(width: 12),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item["jenis"],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+
+                            SizedBox(height: 4),
+
+                            Text(
+                              item["tanggal"],
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                       Text(
-                        item["jenis"],
+                        "Rp ${formatRupiah.format(item["nominal"])}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),
-
-                      SizedBox(height: 4),
-
-                      Text(
-                        item["tanggal"],
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
                     ],
                   ),
-                ),
-
-                Text(
-                  "Rp ${formatRupiah.format(item["nominal"])}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

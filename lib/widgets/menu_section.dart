@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
 import 'package:nurulfalah_apps/pages/infaq_page.dart';
-import 'package:nurulfalah_apps/pages/laporankegiatan_page.dart';
 import 'package:nurulfalah_apps/pages/sedekahsubuh_page.dart';
 import 'package:nurulfalah_apps/pages/zakat_page.dart';
 import 'package:nurulfalah_apps/pages_laporan%20CRUD/laporanadmin.dart';

@@ -103,38 +103,6 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
             ),
 
-            // METODE PEMBAYARAN
-            Container(
-              margin: EdgeInsets.only(bottom: 12),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.green.withOpacity(0.1),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.green,
-                    ),
-                  ),
-
-                  SizedBox(width: 12),
-
-                  Expanded(
-                    child: Text(
-                      "Metode Pembayaran",
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-
-                  Icon(Icons.chevron_right),
-                ],
-              ),
-            ),
-
             // PUSAT BANTUAN
             Container(
               margin: EdgeInsets.only(bottom: 12),

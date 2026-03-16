@@ -4,6 +4,7 @@ import 'package:nurulfalah_apps/database/prefernce.dart';
 import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/pages_laporan%20CRUD/editlaporan.dart';
 import 'package:nurulfalah_apps/pages_laporan%20CRUD/tambahlaporan.dart';
+import 'package:lottie/lottie.dart';
 
 class Laporanadmin extends StatefulWidget {
   const Laporanadmin({super.key});
@@ -60,6 +61,33 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
 
           final data = snapshot.data as List;
 
+          /// JIKA BELUM ADA LAPORAN
+          if (data.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset("assets/animations/empty.json", height: 200),
+
+                  SizedBox(height: 20),
+
+                  Text(
+                    "Belum ada laporan kegiatan",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w200),
+                  ),
+
+                  SizedBox(height: 6),
+
+                  Text(
+                    "Laporan kegiatan masjid akan muncul di sini",
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          /// JIKA ADA DATA
           return ListView.builder(
             padding: EdgeInsets.all(16),
             itemCount: data.length,
@@ -69,7 +97,7 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
               return Container(
                 margin: EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: Color(0xfff90C67C),
+                  color: Color(0xff90C67C),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
@@ -146,7 +174,6 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
                                   icon: Icon(Icons.delete),
                                   onPressed: () async {
                                     await DbHelper.deleteLaporan(item["id"]);
-
                                     setState(() {});
                                   },
                                 ),

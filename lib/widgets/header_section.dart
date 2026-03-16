@@ -29,40 +29,7 @@ class HeaderSection extends StatelessWidget {
               padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  SizedBox(height: 8),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 44,
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 6),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.search, color: Colors.black54),
-                              SizedBox(width: 8),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(width: 12),
-                      Icon(
-                        Icons.notification_add,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 124),
+                  SizedBox(height: 174),
 
                   Container(
                     width: double.infinity,

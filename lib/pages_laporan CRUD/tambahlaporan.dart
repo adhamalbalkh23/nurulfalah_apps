@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nurulfalah_apps/database/sqflite.dart';
+import 'dart:io';
 
 class TambahLaporanPage extends StatefulWidget {
   const TambahLaporanPage({super.key});
@@ -30,49 +30,118 @@ class _TambahLaporanPageState extends State<TambahLaporanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tambah Laporan")),
+      appBar: AppBar(
+        title: Text("Tambah Laporan Kegiatan"),
+        backgroundColor: Colors.green,
+      ),
 
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// Upload Foto
+            Text(
+              "Foto Kegiatan",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            SizedBox(height: 10),
+
             GestureDetector(
               onTap: pickImage,
               child: Container(
-                height: 150,
+                height: 180,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
+
                 child: imageFile == null
-                    ? Center(child: Text("Pilih Foto"))
-                    : Image.file(imageFile!, fit: BoxFit.cover),
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                          SizedBox(height: 8),
+                          Text(
+                            "Tambah Foto",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(imageFile!, fit: BoxFit.cover),
+                      ),
               ),
-            ),
-
-            TextField(
-              controller: judul,
-              decoration: InputDecoration(labelText: "Judul"),
-            ),
-
-            TextField(
-              controller: deskripsi,
-              decoration: InputDecoration(labelText: "Deskripsi"),
             ),
 
             SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: () async {
-                await DbHelper.insertLaporan(
-                  judul.text,
-                  deskripsi.text,
-                  imageFile!.path,
-                );
+            /// Judul
+            Text(
+              "Judul Kegiatan",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
 
-                Navigator.pop(context);
-              },
-              child: Text("Simpan"),
+            SizedBox(height: 8),
+
+            TextField(
+              controller: judul,
+              decoration: InputDecoration(
+                hintText: "Masukkan judul kegiatan",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
+
+            /// Deskripsi
+            Text("Deskripsi", style: TextStyle(fontWeight: FontWeight.bold)),
+
+            SizedBox(height: 8),
+
+            TextField(
+              controller: deskripsi,
+              maxLines: 4,
+              decoration: InputDecoration(
+                hintText: "Masukkan deskripsi kegiatan",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 30),
+
+            /// Tombol Simpan
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () async {
+                  if (imageFile == null) return;
+
+                  await DbHelper.insertLaporan(
+                    judul.text,
+                    deskripsi.text,
+                    imageFile!.path,
+                  );
+
+                  Navigator.pop(context);
+                },
+                child: Text("Simpan Laporan", style: TextStyle(fontSize: 16)),
+              ),
             ),
           ],
         ),
