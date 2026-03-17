@@ -1,4 +1,4 @@
-package com.example.nurulfalah_apps
+package com.ppkd.nurfa
 
 import io.flutter.embedding.android.FlutterActivity
 
