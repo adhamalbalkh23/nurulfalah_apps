@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83866380864",
+    "project_id": "nurfalah-project",
+    "storage_bucket": "nurfalah-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83866380864:android:240149826076a469bf4da5",
+        "android_client_info": {
+          "package_name": "com.ppkd.nurfa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsYNNY6DOdsmy9ljoMYiLBQL2wk8tAW0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
