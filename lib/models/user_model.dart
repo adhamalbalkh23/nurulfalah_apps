@@ -1,34 +1,40 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserModel {
-  final int? id;
-  final String? email;
-  final String? password;
-  final String? role;
-  final String? username;
-  UserModel({this.id, this.email, this.password, this.role, this.username});
+  final String id;
+  final String nama;
+  final String email;
+  final String role;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'email': email,
-      'password': password,
-      'username': username,
-    };
-  }
+  UserModel({
+    required this.id,
+    required this.nama,
+    required this.email,
+    required this.role,
+  });
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  /// DARI FIRESTORE → MODEL
+  factory UserModel.fromMap(Map<String, dynamic> map, String docId) {
     return UserModel(
-      id: map['id'] != null ? map['id'] as int : null,
-      email: map['email'] != null ? map['email'] as String : null,
-      password: map['password'] != null ? map['password'] as String : null,
-      username: map['username'] != null ? map['username'] as String : null,
+      id: docId,
+      nama: map['nama'] ?? '',
+      email: map['email'] ?? '',
+      role: map['role'] ?? 'user',
     );
   }
 
-  String toJson() => json.encode(toMap());
+  /// MODEL → FIRESTORE
+  Map<String, dynamic> toMap() {
+    return {"nama": nama, "email": email, "role": role};
+  }
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  /// COPY WITH (opsional, biar fleksibel)
+  UserModel copyWith({String? id, String? nama, String? email, String? role}) {
+    return UserModel(
+      id: id ?? this.id,
+      nama: nama ?? this.nama,
+      email: email ?? this.email,
+      role: role ?? this.role,
+    );
+  }
 }

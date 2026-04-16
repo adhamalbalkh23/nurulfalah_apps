@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/database/prefernce.dart';
-import 'package:nurulfalah_apps/database/sqflite.dart';
+import 'package:nurulfalah_apps/service/donation_service.dart';
 import 'package:nurulfalah_apps/pages_pembayaran/paymentsukses.dart';
 
 class QrisPage extends StatelessWidget {
@@ -75,21 +75,43 @@ class QrisPage extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () async {
-                  int? userId = await PreferenceHandler.getUserId();
+                  String? userId = await PreferenceHandler.getUserId();
 
-                  if (userId != null) {
-                    await DbHelper.insertDonasi(userId, jenis, nominal);
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Paymentsukses(
+                  if (userId != null && userId.isNotEmpty) {
+                    try {
+                      /// Simpan donasi ke Firebase
+                      await DonationService().insertDonasi(
+                        userId: userId,
                         jenis: jenis,
                         nominal: nominal,
-                        metode: "Qris",
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Paymentsukses(
+                            jenis: jenis,
+                            nominal: nominal,
+                            metode: "Qris",
+                          ),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("❌ Gagal menyimpan donasi: $e"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("❌ User ID tidak ditemukan"),
+                        backgroundColor: Colors.red,
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

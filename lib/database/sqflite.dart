@@ -160,13 +160,24 @@ class DbHelper {
   static Future<void> updateLaporan(
     int id,
     String judul,
-    String deskripsi,
+    String deskripsi, {
+    String? gambar,
+  }
   ) async {
     final dbs = await db();
 
+    final data = <String, dynamic>{
+      "judul": judul,
+      "deskripsi": deskripsi,
+    };
+
+    if (gambar != null) {
+      data["gambar"] = gambar;
+    }
+
     await dbs.update(
       "laporan",
-      {"judul": judul, "deskripsi": deskripsi},
+      data,
       where: "id=?",
       whereArgs: [id],
     );

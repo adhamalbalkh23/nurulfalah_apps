@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nurulfalah_apps/database/sqflite.dart';
+import 'package:nurulfalah_apps/service/laporan_service.dart';
 import 'dart:io';
 
 class TambahLaporanPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class _TambahLaporanPageState extends State<TambahLaporanPage> {
 
   File? imageFile;
   final picker = ImagePicker();
+  final LaporanService _laporanService = LaporanService();
+  bool _isLoading = false;
 
   Future pickImage() async {
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -25,6 +28,13 @@ class _TambahLaporanPageState extends State<TambahLaporanPage> {
         imageFile = File(picked.path);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    judul.dispose();
+    deskripsi.dispose();
+    super.dispose();
   }
 
   @override
@@ -129,18 +139,81 @@ class _TambahLaporanPageState extends State<TambahLaporanPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () async {
-                  if (imageFile == null) return;
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        if (imageFile == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Pilih foto terlebih dahulu"),
+                            ),
+                          );
+                          return;
+                        }
 
-                  await DbHelper.insertLaporan(
-                    judul.text,
-                    deskripsi.text,
-                    imageFile!.path,
-                  );
+                        if (judul.text.isEmpty || deskripsi.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Isi semua field terlebih dahulu"),
+                            ),
+                          );
+                          return;
+                        }
 
-                  Navigator.pop(context);
-                },
-                child: Text("Simpan Laporan", style: TextStyle(fontSize: 16)),
+                        setState(() => _isLoading = true);
+                        try {
+                          print("🔄 Mulai upload laporan...");
+                          await _laporanService
+                              .addLaporan(
+                                judul: judul.text,
+                                deskripsi: deskripsi.text,
+                                imageFile: imageFile!,
+                              )
+                              .timeout(
+                                const Duration(seconds: 60),
+                                onTimeout: () {
+                                  throw "Timeout: Proses upload terlalu lama";
+                                },
+                              );
+
+                          if (mounted) {
+                            print("✅ Laporan berhasil disimpan");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Laporan berhasil disimpan"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        } catch (e) {
+                          print("❌ Error: $e");
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Gagal: $e"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isLoading = false);
+                          }
+                        }
+                      },
+                child: _isLoading
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : Text("Simpan Laporan", style: TextStyle(fontSize: 16)),
               ),
             ),
           ],

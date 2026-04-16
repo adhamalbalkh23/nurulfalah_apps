@@ -16,53 +16,65 @@ class PreferenceHandler {
   static const String _isLogin = 'isLogin';
   static const String _role = 'role';
   static const String _nama = 'nama';
-  static const String _userId = "userId";
+  static const String _userId = "user_id";
 
-  // SIMPAN LOGIN
+  // =========================
+  // LOGIN
+  // =========================
+
   Future<void> storingIsLogin(bool isLogin) async {
-    _preferences.setBool(_isLogin, isLogin);
+    await _preferences.setBool(_isLogin, isLogin);
   }
 
-  // AMBIL LOGIN
   static Future<bool?> getIsLogin() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_isLogin);
   }
 
-  // SIMPAN ROLE
+  // =========================
+  // ROLE
+  // =========================
+
   Future<void> storingRole(String role) async {
-    _preferences.setString(_role, role);
+    await _preferences.setString(_role, role);
   }
 
-  // AMBIL ROLE
   static Future<String?> getRole() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_role);
   }
 
-  // SIMPAN NAMA
+  // =========================
+  // NAMA
+  // =========================
+
   Future<void> storingNama(String nama) async {
-    _preferences.setString(_nama, nama);
+    await _preferences.setString(_nama, nama);
   }
 
-  // AMBIL NAMA
   static Future<String?> getNama() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_nama);
   }
 
+  // =========================
+  // USER ID (SUDAH DIUBAH KE STRING)
+  // =========================
+
+  Future<void> storingUserId(String id) async {
+    await _preferences.setString(_userId, id);
+  }
+
+  static Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userId);
+  }
+
+  // =========================
   // LOGOUT
+  // =========================
+
   Future<void> deleteIsLogin() async {
     await _preferences.remove(_isLogin);
-  }
-
-  // UserId
-  Future<void> storingUserId(int id) async {
-    _preferences.setInt(_userId, id);
-  }
-
-  static Future<int?> getUserId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_userId);
   }
 }

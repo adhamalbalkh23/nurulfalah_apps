@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nurulfalah_apps/database/sqflite.dart';
 import 'package:nurulfalah_apps/extension/navigator.dart';
-import 'package:nurulfalah_apps/models/user_model.dart';
 import 'package:nurulfalah_apps/pages/login_page.dart';
+import 'package:nurulfalah_apps/service/auth_service.dart';
 
 class Registerpage extends StatefulWidget {
   const Registerpage({super.key});
@@ -14,8 +13,13 @@ class Registerpage extends StatefulWidget {
 class _RegisterpageState extends State<Registerpage> {
   final TextEditingController emailContoler = TextEditingController();
   final TextEditingController passwordControler = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController namaControler = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+  String selectedRole = "user"; // Default: user
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _RegisterpageState extends State<Registerpage> {
             ),
           ),
           SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 62),
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 62),
             child: Form(
               key: _formKey,
               child: Column(
@@ -44,8 +48,7 @@ class _RegisterpageState extends State<Registerpage> {
                           height: 316,
                           width: 316,
                         ),
-
-                        Text(
+                        const Text(
                           "Pendaftaran Akun",
                           style: TextStyle(
                             fontSize: 20,
@@ -56,33 +59,41 @@ class _RegisterpageState extends State<Registerpage> {
                     ),
                   ),
 
-                  SizedBox(height: 2),
+                  const SizedBox(height: 10),
 
-                  Text(
+                  /// NAMA
+                  const Text(
                     "Nama",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   TextFormField(
                     controller: namaControler,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Masukkan namamu disini",
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Nama wajib diisi";
+                      }
+                      return null;
+                    },
                   ),
 
-                  SizedBox(height: 4),
+                  const SizedBox(height: 10),
 
-                  Text(
+                  /// EMAIL
+                  const Text(
                     "Email",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   TextFormField(
                     controller: emailContoler,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Masukkan emailmu disini",
                       border: OutlineInputBorder(),
                       filled: true,
@@ -98,17 +109,19 @@ class _RegisterpageState extends State<Registerpage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 4),
 
-                  Text(
+                  const SizedBox(height: 10),
+
+                  /// PASSWORD
+                  const Text(
                     "Password",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   TextFormField(
                     controller: passwordControler,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Masukkan passwordmu disini",
                       border: OutlineInputBorder(),
                       filled: true,
@@ -118,57 +131,118 @@ class _RegisterpageState extends State<Registerpage> {
                       if (value == null || value.isEmpty) {
                         return "Password wajib diisi";
                       }
+                      if (value.length < 6) {
+                        return "Password minimal 6 karakter";
+                      }
                       return null;
                     },
                   ),
-                  SizedBox(height: 4),
 
-                  Text(
+                  const SizedBox(height: 10),
+
+                  /// KONFIRMASI PASSWORD
+                  const Text(
                     "Konfirmasi Password",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   TextFormField(
-                    controller: passwordControler,
+                    controller: confirmPasswordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Konfirmasi passwordmu disini",
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    validator: (value) {
+                      if (value != passwordControler.text) {
+                        return "Password tidak sama";
+                      }
+                      return null;
+                    },
                   ),
-                  SizedBox(height: 12),
 
+                  const SizedBox(height: 20),
+
+                  /// PILIH ROLE
+                  const Text(
+                    "Tipe Akun",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: selectedRole,
+                        isExpanded: true,
+                        items: const [
+                          DropdownMenuItem(
+                            value: "user",
+                            child: Text("👤 User Biasa"),
+                          ),
+                          DropdownMenuItem(
+                            value: "admin",
+                            child: Text("👑 Pengurus Masjid (Admin)"),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedRole = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// BUTTON DAFTAR
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        await DbHelper.registerUser(
-                          namaControler.text.trim(),
-                          emailContoler.text.trim(),
-                          passwordControler.text.trim(),
+                        if (!_formKey.currentState!.validate()) return;
+
+                        final user = await AuthService().register(
+                          nama: namaControler.text.trim(),
+                          email: emailContoler.text.trim(),
+                          password: passwordControler.text.trim(),
+                          role: selectedRole,
                         );
 
-                        if (context.mounted) {
+                        if (user != null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Pendaftaran Berhasil")),
+                            SnackBar(
+                              content: Text(
+                                "✅ Pendaftaran Berhasil sebagai ${selectedRole == 'admin' ? 'Pengurus Masjid' : 'User'}",
+                              ),
+                            ),
                           );
 
                           context.pushReplacement(Loginpage());
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("❌ Register gagal")),
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.lightGreen,
-                        padding: EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Daftar",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

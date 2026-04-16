@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nurulfalah_apps/database/prefernce.dart';
-import 'package:nurulfalah_apps/database/sqflite.dart';
+import 'package:nurulfalah_apps/service/donation_service.dart';
 
 class Riwayatcrud extends StatefulWidget {
   const Riwayatcrud({super.key});
@@ -12,26 +12,20 @@ class Riwayatcrud extends StatefulWidget {
 }
 
 class _RiwayatdonasiPageState extends State<Riwayatcrud> {
-  List dataDonasi = [];
-
-  void loadDonasi() async {
-    int? userId = await PreferenceHandler.getUserId();
-    print("UserID: $userId");
-
-    if (userId != null) {
-      final data = await DbHelper.getDonasiUser(userId);
-      print("Data Donasi: $data");
-
-      setState(() {
-        dataDonasi = data;
-      });
-    }
-  }
+  late String? currentUserId;
 
   @override
   void initState() {
     super.initState();
-    loadDonasi();
+    _loadUserId();
+  }
+
+  void _loadUserId() async {
+    final userId = await PreferenceHandler.getUserId();
+    setState(() {
+      currentUserId = userId;
+    });
+    print("📱 User ID loaded: $userId");
   }
 
   final formatRupiah = NumberFormat("#,###", "id_ID");
@@ -71,92 +65,113 @@ class _RiwayatdonasiPageState extends State<Riwayatcrud> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-
       backgroundColor: Colors.white,
 
-      /// JIKA BELUM ADA RIWAYAT DONASI
-      body: dataDonasi.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  /// LOTTIE ANIMATION
-                  Lottie.asset("assets/animations/empty.json", height: 200),
+      /// JIKA USERID BELUM LOADED
+      body: currentUserId == null
+          ? Center(child: CircularProgressIndicator())
+          /// REAL-TIME STREAM DARI FIREBASE
+          : StreamBuilder<List<Map<String, dynamic>>>(
+              stream: DonationService().streamDonasiUser(currentUserId!),
+              builder: (context, snapshot) {
+                /// JIKA BELUM ADA DATA
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-                  SizedBox(height: 20),
+                /// JIKA ERROR
+                if (snapshot.hasError) {
+                  return Center(child: Text("❌ Error: ${snapshot.error}"));
+                }
 
-                  Text(
-                    "Belum ada riwayat donasi",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
-                  ),
-                ],
-              ),
-            )
-          /// JIKA ADA DATA DONASI
-          : ListView.builder(
-              padding: EdgeInsets.all(16),
-              itemCount: dataDonasi.length,
-              itemBuilder: (context, index) {
-                final item = dataDonasi[index];
+                final dataDonasi = snapshot.data ?? [];
 
-                return Container(
-                  margin: EdgeInsets.only(bottom: 16),
+                /// JIKA BELUM ADA RIWAYAT DONASI
+                if (dataDonasi.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        /// LOTTIE ANIMATION
+                        Lottie.asset(
+                          "assets/animations/empty.json",
+                          height: 200,
+                        ),
+
+                        SizedBox(height: 20),
+
+                        Text(
+                          "Belum ada riwayat donasi",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w200,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                /// JIKA ADA DATA DONASI
+                return ListView.builder(
                   padding: EdgeInsets.all(16),
+                  itemCount: dataDonasi.length,
+                  itemBuilder: (context, index) {
+                    final item = dataDonasi[index];
 
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: getColor(
-                          item["jenis"],
-                        ).withOpacity(0.1),
-                        child: Icon(
-                          getIcon(item["jenis"]),
-                          color: getColor(item["jenis"]),
-                        ),
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-
-                      SizedBox(width: 12),
-
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: getColor(
                               item["jenis"],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                            ).withOpacity(0.1),
+                            child: Icon(
+                              getIcon(item["jenis"]),
+                              color: getColor(item["jenis"]),
                             ),
-
-                            SizedBox(height: 4),
-
-                            Text(
-                              item["tanggal"],
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item["jenis"],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  item["tanggal"],
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            "Rp ${formatRupiah.format(item["nominal"])}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
-
-                      Text(
-                        "Rp ${formatRupiah.format(item["nominal"])}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
