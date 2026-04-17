@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,13 +12,20 @@ class LaporanService {
 
   static bool _firebaseDown = false;
 
+  /// Helper untuk mengonversi File ke Base64 (tanpa kompresi tambahan di sini, 
+  /// karena sebaiknya dilakukan saat pickImage untuk efisiensi memory)
+  Future<String> _fileToBase64(File file) async {
+    List<int> imageBytes = await file.readAsBytes();
+    return base64Encode(imageBytes);
+  }
+
   Future<void> addLaporan({
     required String judul,
     required String deskripsi,
     required File imageFile,
   }) async {
     try {
-      print("Mulai upload laporan dengan judul: $judul");
+      print("Mulai simpan laporan dengan judul: $judul");
 
       if (_firebaseDown) {
         print("Firebase sedang down, simpan ke SQLite");
@@ -26,26 +34,14 @@ class LaporanService {
         return;
       }
 
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final imagePath = 'laporan/$timestamp.jpg';
-
-      print("Uploading image ke path: $imagePath");
-      await _storage.ref(imagePath).putFile(imageFile).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw TimeoutException(
-            "Upload timeout - Koneksi internet mungkin lambat",
-          );
-        },
-      );
-
-      final imageUrl = await _storage.ref(imagePath).getDownloadURL();
-      print("Gambar berhasil diupload: $imageUrl");
+      // Konversi gambar ke Base64
+      final base64Image = await _fileToBase64(imageFile);
+      print("Gambar berhasil dikonversi ke Base64");
 
       await _firestore.collection('laporan').add({
         'judul': judul,
         'deskripsi': deskripsi,
-        'gambar': imageUrl,
+        'gambar': base64Image,
         'tanggal': Timestamp.fromDate(DateTime.now()),
       }).timeout(
         const Duration(seconds: 15),
@@ -137,32 +133,30 @@ class LaporanService {
     try {
       print("Mulai update laporan dengan ID: $laporanId");
 
-      String imageUrl = oldImageUrl ?? '';
+      Map<String, dynamic> updateData = {
+        'judul': judul,
+        'deskripsi': deskripsi,
+      };
 
       if (imageFile != null) {
-        if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
+        // Jika ada gambar baru, konversi ke Base64
+        final base64Image = await _fileToBase64(imageFile);
+        updateData['gambar'] = base64Image;
+        print("Gambar baru berhasil dikonversi ke Base64");
+        
+        // Opsional: Hapus gambar lama dari Firebase Storage jika format lama adalah URL
+        if (oldImageUrl != null && oldImageUrl.startsWith('http')) {
           try {
             final ref = FirebaseStorage.instance.refFromURL(oldImageUrl);
             await ref.delete();
-            print("Gambar lama berhasil dihapus");
+            print("Gambar lama di Storage berhasil dihapus");
           } catch (e) {
-            print("Gagal menghapus gambar lama: $e");
+            print("Gagal menghapus gambar lama dari Storage (mungkin sudah tidak ada): $e");
           }
         }
-
-        final timestamp = DateTime.now().millisecondsSinceEpoch;
-        final imagePath = 'laporan/$timestamp.jpg';
-
-        await _storage.ref(imagePath).putFile(imageFile);
-        imageUrl = await _storage.ref(imagePath).getDownloadURL();
-        print("Gambar baru berhasil diupload: $imageUrl");
       }
 
-      await _firestore.collection('laporan').doc(laporanId).update({
-        'judul': judul,
-        'deskripsi': deskripsi,
-        'gambar': imageUrl,
-      });
+      await _firestore.collection('laporan').doc(laporanId).update(updateData);
 
       print("Laporan berhasil diupdate");
     } on FirebaseException catch (e) {
@@ -188,13 +182,14 @@ class LaporanService {
     try {
       print("Mulai hapus laporan dengan ID: $laporanId");
 
-      if (imageUrl.isNotEmpty) {
+      // Jika format lama adalah URL, hapus dari Storage
+      if (imageUrl.startsWith('http')) {
         try {
           final ref = FirebaseStorage.instance.refFromURL(imageUrl);
           await ref.delete();
-          print("Gambar berhasil dihapus");
+          print("Gambar di Storage berhasil dihapus");
         } catch (e) {
-          print("Gagal menghapus gambar: $e");
+          print("Gagal menghapus gambar dari Storage: $e");
         }
       }
 

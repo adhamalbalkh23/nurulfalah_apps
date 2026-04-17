@@ -21,7 +21,12 @@ class _TambahLaporanPageState extends State<TambahLaporanPage> {
   bool _isLoading = false;
 
   Future pickImage() async {
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50, // Kompresi kualitas gambar (0-100)
+      maxWidth: 800,    // Batasi lebar maksimal agar Base64 tidak terlalu besar
+      maxHeight: 800,   // Batasi tinggi maksimal
+    );
 
     if (picked != null) {
       setState(() {

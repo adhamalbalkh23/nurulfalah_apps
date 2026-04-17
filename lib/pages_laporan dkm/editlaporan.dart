@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,12 +52,44 @@ class _EditLaporanPageState extends State<EditLaporanPage> {
   }
 
   Future pickImage() async {
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 800,
+      maxHeight: 800,
+    );
 
     if (picked != null) {
       setState(() {
         newImageFile = File(picked.path);
       });
+    }
+  }
+
+  Widget _buildImagePreview() {
+    if (newImageFile != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.file(newImageFile!, fit: BoxFit.cover),
+      );
+    }
+
+    if (oldImageUrl.startsWith('http')) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(oldImageUrl, fit: BoxFit.cover),
+      );
+    } else if (oldImageUrl.length > 100) {
+      // Asumsi jika string panjang dan bukan URL/Path, maka itu Base64
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.memory(base64Decode(oldImageUrl), fit: BoxFit.cover),
+      );
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.file(File(oldImageUrl), fit: BoxFit.cover),
+      );
     }
   }
 
@@ -95,26 +128,7 @@ class _EditLaporanPageState extends State<EditLaporanPage> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: newImageFile == null
-                    ? (oldImageUrl.startsWith('http')
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                oldImageUrl,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                File(oldImageUrl),
-                                fit: BoxFit.cover,
-                              ),
-                            ))
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(newImageFile!, fit: BoxFit.cover),
-                      ),
+                child: _buildImagePreview(),
               ),
             ),
             SizedBox(height: 20),

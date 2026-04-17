@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nurulfalah_apps/database/prefernce.dart';
@@ -242,21 +243,43 @@ class _LaporankegiatanPageState extends State<Laporanadmin> {
   }
 
   Widget _buildLaporanImage(LaporanModel item) {
-    final imageWidget = item.isLocal || !item.gambar.startsWith('http')
-        ? Image.file(
-            File(item.gambar),
-            height: 160,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => _buildImageError(),
-          )
-        : Image.network(
-            item.gambar,
-            height: 160,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => _buildImageError(),
-          );
+    Widget imageWidget;
+    
+    if (item.isLocal) {
+      imageWidget = Image.file(
+        File(item.gambar),
+        height: 160,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildImageError(),
+      );
+    } else if (item.gambar.startsWith('http')) {
+      imageWidget = Image.network(
+        item.gambar,
+        height: 160,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildImageError(),
+      );
+    } else if (item.gambar.length > 100) {
+      // Asumsi Base64 jika string panjang dan bukan URL
+      imageWidget = Image.memory(
+        base64Decode(item.gambar),
+        height: 160,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildImageError(),
+      );
+    } else {
+      // Fallback ke File jika string pendek (mungkin path lokal di non-isLocal)
+      imageWidget = Image.file(
+        File(item.gambar),
+        height: 160,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildImageError(),
+      );
+    }
 
     return SizedBox(height: 160, width: double.infinity, child: imageWidget);
   }
